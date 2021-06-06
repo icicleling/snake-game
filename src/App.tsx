@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import "./App.css";
 import p5 from "p5";
-import { DirectionEnum, GRID_SIZE } from "./utils/constants";
+import { CANVAS_SIZE, DirectionEnum, GRID_SIZE } from "./utils/constants";
 import Snake from "./components/Snake";
 import Food from "./components/Food";
 
@@ -34,14 +34,14 @@ function App() {
         snake.update();
         snake.draw();
         if (snake.hasEatenFood(food)) {
-          food.spawn();
+          food.spawn(snake);
           snake.grow();
         }
         food.draw();
       };
 
       p.setup = () => {
-        p.createCanvas(700, 700);
+        p.createCanvas(CANVAS_SIZE, CANVAS_SIZE);
         p.frameRate(0);
 
         snake = new Snake(p);
