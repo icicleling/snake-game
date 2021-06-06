@@ -1,13 +1,14 @@
 import React, { useEffect, useRef } from "react";
 import "./App.css";
 import p5 from "p5";
-import { DirectionEnum, GRID_SIZE } from "./constants";
+import { DirectionEnum, GRID_SIZE } from "./utils/constants";
 import Snake from "./components/Snake";
 import Food from "./components/Food";
 
 function App() {
   const contentRef = useRef<HTMLDivElement>(null);
   const p5Ref = useRef<p5 | null>(null);
+  const prevKeyFrame = useRef<number>(0);
 
   const initialP5 = () => {
     if (!contentRef.current) return;
@@ -52,6 +53,9 @@ function App() {
 
       p.keyPressed = () => {
         if (p.frameRate() === 0) p.frameRate(6);
+
+        if (p.frameCount === prevKeyFrame.current) return;
+        prevKeyFrame.current = p.frameCount;
 
         if (p.keyCode === 38 && snake.dir !== DirectionEnum.Down) {
           snake.dir = DirectionEnum.Up;

@@ -1,5 +1,5 @@
 import p5 from "p5";
-import { DirectionEnum, GRID_SIZE } from "../constants";
+import { DirectionEnum, GRID_SIZE } from "../utils/constants";
 import Food from "./Food";
 
 class Snake {

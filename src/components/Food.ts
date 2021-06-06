@@ -1,5 +1,5 @@
 import p5 from "p5";
-import { GRID_SIZE } from "../constants";
+import { GRID_SIZE } from "../utils/constants";
 
 class Food {
   p: p5;
