@@ -1,5 +1,5 @@
 import p5 from "p5";
-import { DirectionEnum, GRID_SIZE } from "../utils/constants";
+import { CANVAS_SIZE, DirectionEnum, GRID_SIZE } from "../utils/constants";
 import Food from "./Food";
 
 class Snake {
@@ -32,6 +32,7 @@ class Snake {
 
   update() {
     this.hitDetection();
+    this.hitWall();
     this.lastX = this.body[this.body.length - 1].x;
     this.lastY = this.body[this.body.length - 1].y;
     for (let i = this.body.length - 1; i >= 1; i--) {
@@ -70,6 +71,14 @@ class Snake {
       ) {
         this.spawn();
       }
+    }
+  }
+
+  hitWall() {
+    const x = this.body[0].x;
+    const y = this.body[0].y;
+    if (x > CANVAS_SIZE || x < 0 || y > CANVAS_SIZE || y < 0) {
+      this.spawn();
     }
   }
 
