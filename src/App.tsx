@@ -9,6 +9,7 @@ function App() {
   const contentRef = useRef<HTMLDivElement>(null);
   const p5Ref = useRef<p5 | null>(null);
   const prevKeyFrame = useRef<number>(0);
+  const nextDirection = useRef<DirectionEnum | null>(null);
 
   const initialP5 = () => {
     if (!contentRef.current) return;
@@ -29,6 +30,14 @@ function App() {
             p.line(x, 0, x, p.height);
             p.line(0, y, p.width, y);
           }
+        }
+
+        if (
+          nextDirection.current &&
+          p.frameCount - prevKeyFrame.current === 2
+        ) {
+          snake.dir = nextDirection.current;
+          nextDirection.current = null;
         }
 
         snake.update();
@@ -52,10 +61,22 @@ function App() {
       p.draw = draw;
 
       p.keyPressed = () => {
-        if (p.frameRate() === 0) p.frameRate(6);
+        if (p.frameRate() === 0) p.frameRate(2);
 
-        if (p.frameCount === prevKeyFrame.current) return;
+        if (p.frameCount === prevKeyFrame.current) {
+          if (p.keyCode === 38 && snake.dir !== DirectionEnum.Down) {
+            nextDirection.current = DirectionEnum.Up;
+          } else if (p.keyCode === 40 && snake.dir !== DirectionEnum.Up) {
+            nextDirection.current = DirectionEnum.Down;
+          } else if (p.keyCode === 37 && snake.dir !== DirectionEnum.Right) {
+            nextDirection.current = DirectionEnum.Left;
+          } else if (p.keyCode === 39 && snake.dir !== DirectionEnum.Left) {
+            nextDirection.current = DirectionEnum.Right;
+          }
+          return;
+        }
         prevKeyFrame.current = p.frameCount;
+        nextDirection.current = null;
 
         if (p.keyCode === 38 && snake.dir !== DirectionEnum.Down) {
           snake.dir = DirectionEnum.Up;
