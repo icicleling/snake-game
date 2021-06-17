@@ -1,15 +1,20 @@
 import React, { useEffect, useRef } from "react";
 import "./App.css";
 import p5 from "p5";
-import { CANVAS_SIZE, DirectionEnum, GRID_SIZE } from "./utils/constants";
+import {
+  CANVAS_SIZE,
+  DirectionEnum,
+  FRAME_RATE,
+  GRID_SIZE,
+} from "./utils/constants";
 import Snake from "./components/Snake";
 import Food from "./components/Food";
 
 function App() {
   const contentRef = useRef<HTMLDivElement>(null);
   const p5Ref = useRef<p5 | null>(null);
-  const prevKeyFrame = useRef<number>(0);
-  const nextDirection = useRef<DirectionEnum | null>(null);
+  const prevKeyTime = useRef<number>(0);
+  const nextDirection = useRef<DirectionEnum[]>([]);
 
   const initialP5 = () => {
     if (!contentRef.current) return;
@@ -32,12 +37,9 @@ function App() {
           }
         }
 
-        if (
-          nextDirection.current &&
-          p.frameCount - prevKeyFrame.current === 2
-        ) {
-          snake.dir = nextDirection.current;
-          nextDirection.current = null;
+        if (nextDirection.current.length) {
+          snake.dir = nextDirection.current[0];
+          nextDirection.current.shift();
         }
 
         snake.update();
@@ -61,31 +63,38 @@ function App() {
       p.draw = draw;
 
       p.keyPressed = () => {
-        if (p.frameRate() === 0) p.frameRate(2);
+        if (p.frameRate() === 0) p.frameRate(FRAME_RATE);
 
-        if (p.frameCount === prevKeyFrame.current) {
-          if (p.keyCode === 38 && snake.dir !== DirectionEnum.Down) {
-            nextDirection.current = DirectionEnum.Up;
-          } else if (p.keyCode === 40 && snake.dir !== DirectionEnum.Up) {
-            nextDirection.current = DirectionEnum.Down;
-          } else if (p.keyCode === 37 && snake.dir !== DirectionEnum.Right) {
-            nextDirection.current = DirectionEnum.Left;
-          } else if (p.keyCode === 39 && snake.dir !== DirectionEnum.Left) {
-            nextDirection.current = DirectionEnum.Right;
+        if (Date.now() - prevKeyTime.current <= 1000 / FRAME_RATE) {
+          const prevDirection =
+            nextDirection.current[nextDirection.current.length - 1];
+
+          if (p.keyCode === 38 && prevDirection !== DirectionEnum.Down) {
+            nextDirection.current.push(DirectionEnum.Up);
+          } else if (p.keyCode === 40 && prevDirection !== DirectionEnum.Up) {
+            nextDirection.current.push(DirectionEnum.Down);
+          } else if (
+            p.keyCode === 37 &&
+            prevDirection !== DirectionEnum.Right
+          ) {
+            nextDirection.current.push(DirectionEnum.Left);
+          } else if (p.keyCode === 39 && prevDirection !== DirectionEnum.Left) {
+            nextDirection.current.push(DirectionEnum.Right);
           }
           return;
         }
-        prevKeyFrame.current = p.frameCount;
-        nextDirection.current = null;
+
+        prevKeyTime.current = Date.now();
+        nextDirection.current = [];
 
         if (p.keyCode === 38 && snake.dir !== DirectionEnum.Down) {
-          snake.dir = DirectionEnum.Up;
+          nextDirection.current.push(DirectionEnum.Up);
         } else if (p.keyCode === 40 && snake.dir !== DirectionEnum.Up) {
-          snake.dir = DirectionEnum.Down;
+          nextDirection.current.push(DirectionEnum.Down);
         } else if (p.keyCode === 37 && snake.dir !== DirectionEnum.Right) {
-          snake.dir = DirectionEnum.Left;
+          nextDirection.current.push(DirectionEnum.Left);
         } else if (p.keyCode === 39 && snake.dir !== DirectionEnum.Left) {
-          snake.dir = DirectionEnum.Right;
+          nextDirection.current.push(DirectionEnum.Right);
         }
       };
     }
