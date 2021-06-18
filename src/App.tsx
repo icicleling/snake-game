@@ -1,14 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import "./App.css";
 import p5 from "p5";
-import {
-  CANVAS_SIZE,
-  DirectionEnum,
-  FRAME_RATE,
-  GRID_SIZE,
-} from "./utils/constants";
+import { CANVAS_SIZE, DirectionEnum, FRAME_RATE } from "./utils/constants";
 import Snake from "./components/Snake";
 import Food from "./components/Food";
+import Board from "./components/Board";
 
 function App() {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -19,6 +15,7 @@ function App() {
   const initialP5 = () => {
     if (!contentRef.current) return;
 
+    let board: Board;
     let snake: Snake;
     let food: Food;
 
@@ -26,21 +23,12 @@ function App() {
       if (p5Ref.current) p5Ref.current.remove();
 
       const draw = () => {
-        p.background(200);
-
-        for (let x = 0; x < p.width; x += p.width / GRID_SIZE) {
-          for (let y = 0; y < p.height; y += p.height / GRID_SIZE) {
-            p.stroke(255);
-            p.strokeWeight(1);
-            p.line(x, 0, x, p.height);
-            p.line(0, y, p.width, y);
-          }
-        }
-
         if (nextDirection.current.length) {
           snake.dir = nextDirection.current[0];
           nextDirection.current.shift();
         }
+
+        board.draw();
 
         snake.update();
         snake.draw();
@@ -55,6 +43,7 @@ function App() {
         p.createCanvas(CANVAS_SIZE, CANVAS_SIZE);
         p.frameRate(0);
 
+        board = new Board(p);
         snake = new Snake(p);
         food = new Food(p);
         draw();
