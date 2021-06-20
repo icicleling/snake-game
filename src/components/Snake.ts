@@ -7,7 +7,7 @@ import Food from "./Food";
 class Snake {
   p: p5;
   body: { x: number; y: number }[];
-  dir: DirectionEnum;
+  dir: DirectionEnum | undefined;
   lastX: number;
   lastY: number;
   board: Board;
@@ -17,7 +17,7 @@ class Snake {
     this.board = board;
     this.body = [];
     this.body.push({ x: getDecimal(p.width / 2), y: getDecimal(p.height / 2) });
-    this.dir = DirectionEnum.Right;
+    this.dir = undefined;
     this.lastX = this.body[this.body.length - 1].x;
     this.lastY = this.body[this.body.length - 1].y;
   }
@@ -65,9 +65,10 @@ class Snake {
       x: getDecimal(this.p.width / 2),
       y: getDecimal(this.p.height / 2),
     });
-    this.dir = DirectionEnum.Right;
+    this.dir = undefined;
     this.lastX = this.body[this.body.length - 1].x;
     this.lastY = this.body[this.body.length - 1].y;
+    this.p.frameRate(0);
   }
 
   hitDetection() {

@@ -52,7 +52,7 @@ function App() {
       p.draw = draw;
 
       p.keyPressed = () => {
-        if (p.frameRate() === 0) p.frameRate(FRAME_RATE);
+        p.frameRate(FRAME_RATE);
 
         if (Date.now() - prevKeyTime.current <= 1000 / FRAME_RATE) {
           const prevDirection =
