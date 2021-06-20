@@ -85,9 +85,9 @@ class Snake {
     const x = this.body[0].x;
     const y = this.body[0].y;
     if (
-      x > this.board.CANVAS_SIZE ||
+      x > this.board.CANVAS_SIZE - this.p.width / GRID_SIZE ||
       x < 0 ||
-      y > this.board.CANVAS_SIZE ||
+      y > this.board.CANVAS_SIZE - this.p.height / GRID_SIZE ||
       y < 0
     ) {
       this.spawn();
