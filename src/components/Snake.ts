@@ -1,5 +1,7 @@
 import p5 from "p5";
-import { CANVAS_SIZE, DirectionEnum, GRID_SIZE } from "../utils/constants";
+import { DirectionEnum, GRID_SIZE } from "../utils/constants";
+import { getDecimal } from "../utils/helper";
+import Board from "./Board";
 import Food from "./Food";
 
 class Snake {
@@ -8,14 +10,16 @@ class Snake {
   dir: DirectionEnum;
   lastX: number;
   lastY: number;
+  board: Board;
 
-  constructor(p: p5) {
+  constructor(p: p5, board: Board) {
     this.p = p;
+    this.board = board;
     this.body = [];
-    this.body.push({ x: p.width / 2, y: p.height / 2 });
+    this.body.push({ x: getDecimal(p.width / 2), y: getDecimal(p.height / 2) });
     this.dir = DirectionEnum.Right;
-    this.lastX = p.width / 2;
-    this.lastY = p.height / 2;
+    this.lastX = this.body[this.body.length - 1].x;
+    this.lastY = this.body[this.body.length - 1].y;
   }
 
   draw() {
@@ -41,13 +45,13 @@ class Snake {
     }
 
     if (this.dir === DirectionEnum.Up) {
-      this.body[0].y -= this.p.height / GRID_SIZE;
+      this.body[0].y = getDecimal(this.body[0].y - this.p.height / GRID_SIZE);
     } else if (this.dir === DirectionEnum.Down) {
-      this.body[0].y += this.p.height / GRID_SIZE;
+      this.body[0].y = getDecimal(this.body[0].y + this.p.height / GRID_SIZE);
     } else if (this.dir === DirectionEnum.Left) {
-      this.body[0].x -= this.p.width / GRID_SIZE;
+      this.body[0].x = getDecimal(this.body[0].x - this.p.width / GRID_SIZE);
     } else if (this.dir === DirectionEnum.Right) {
-      this.body[0].x += this.p.width / GRID_SIZE;
+      this.body[0].x = getDecimal(this.body[0].x + this.p.width / GRID_SIZE);
     }
   }
 
@@ -57,10 +61,13 @@ class Snake {
 
   spawn() {
     this.body = [];
-    this.body.push({ x: this.p.width / 2, y: this.p.height / 2 });
+    this.body.push({
+      x: getDecimal(this.p.width / 2),
+      y: getDecimal(this.p.height / 2),
+    });
     this.dir = DirectionEnum.Right;
-    this.lastX = this.p.width / 2;
-    this.lastY = this.p.height / 2;
+    this.lastX = this.body[this.body.length - 1].x;
+    this.lastY = this.body[this.body.length - 1].y;
   }
 
   hitDetection() {
@@ -77,7 +84,12 @@ class Snake {
   hitWall() {
     const x = this.body[0].x;
     const y = this.body[0].y;
-    if (x > CANVAS_SIZE || x < 0 || y > CANVAS_SIZE || y < 0) {
+    if (
+      x > this.board.CANVAS_SIZE ||
+      x < 0 ||
+      y > this.board.CANVAS_SIZE ||
+      y < 0
+    ) {
       this.spawn();
     }
   }

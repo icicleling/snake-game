@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import "./App.css";
 import p5 from "p5";
-import { CANVAS_SIZE, DirectionEnum, FRAME_RATE } from "./utils/constants";
+import { DirectionEnum, FRAME_RATE } from "./utils/constants";
 import Snake from "./components/Snake";
 import Food from "./components/Food";
 import Board from "./components/Board";
@@ -40,12 +40,12 @@ function App() {
       };
 
       p.setup = () => {
-        p.createCanvas(CANVAS_SIZE, CANVAS_SIZE);
+        board = new Board(p);
+        p.createCanvas(board.CANVAS_SIZE, board.CANVAS_SIZE);
         p.frameRate(0);
 
-        board = new Board(p);
-        snake = new Snake(p);
-        food = new Food(p);
+        snake = new Snake(p, board);
+        food = new Food(p, board);
         draw();
       };
 
