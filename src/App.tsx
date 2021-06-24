@@ -5,6 +5,7 @@ import { DirectionEnum, FRAME_RATE } from "./utils/constants";
 import Snake from "./components/Snake";
 import Food from "./components/Food";
 import Board from "./components/Board";
+import styled from "styled-components";
 
 function App() {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -95,7 +96,12 @@ function App() {
     initialP5();
   }, []);
 
-  return <div ref={contentRef}></div>;
+  return <Root ref={contentRef} />;
 }
+
+const Root = styled.div`
+  margin: 0 auto;
+  width: max-content;
+`;
 
 export default App;
