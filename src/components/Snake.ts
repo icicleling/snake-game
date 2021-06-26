@@ -80,14 +80,6 @@ class Snake {
   }
 
   hitWall() {
-    console.log(
-      "hitwall:",
-      this.body[0],
-      this.body[0].boardCol > GRID_SIZE - 1 ||
-        this.body[0].boardCol < 0 ||
-        this.body[0].boardRow > GRID_SIZE - 1 ||
-        this.body[0].boardRow < 0
-    );
     if (
       this.body[0].boardCol > GRID_SIZE - 1 ||
       this.body[0].boardCol < 0 ||
