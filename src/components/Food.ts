@@ -5,8 +5,8 @@ import Snake from "./Snake";
 
 class Food {
   p: p5;
-  x: number = 0;
-  y: number = 0;
+  boardCol: number = 0;
+  boardRow: number = 0;
   board: Board;
 
   constructor(p: p5, board: Board) {
@@ -16,26 +16,32 @@ class Food {
   }
 
   spawn(snake?: Snake) {
-    let coords = this.board.ALL_GRID_COORDS.reduce(
-      (prev, curr) => [...prev, ...curr],
-      []
-    );
+    let boardCellCoords: { boardRow: number; boardCol: number }[] = [];
+    for (let i = 0; i < GRID_SIZE; i++) {
+      for (let j = 0; j < GRID_SIZE; j++) {
+        boardCellCoords.push({ boardRow: i, boardCol: j });
+      }
+    }
+
     if (snake) {
-      coords = coords.filter(
-        (item) => !snake.body.find((v) => v.x === item.x && v.y === item.y)
+      boardCellCoords = boardCellCoords.filter(
+        (item) =>
+          !snake.body.find(
+            (v) => v.boardCol === item.boardCol && v.boardRow === item.boardRow
+          )
       );
     }
 
-    const randIndex = this.p.floor(this.p.random(coords.length));
-    this.x = coords[randIndex].x;
-    this.y = coords[randIndex].y;
+    const randIndex = this.p.floor(this.p.random(boardCellCoords.length));
+    this.boardCol = boardCellCoords[randIndex].boardCol;
+    this.boardRow = boardCellCoords[randIndex].boardRow;
   }
 
   draw() {
     this.p.fill(255, 100, 100);
     this.p.rect(
-      this.x,
-      this.y,
+      this.board.ALL_GRID_COORDS[this.boardRow][this.boardCol].x,
+      this.board.ALL_GRID_COORDS[this.boardRow][this.boardCol].y,
       this.p.width / GRID_SIZE,
       this.p.height / GRID_SIZE
     );
