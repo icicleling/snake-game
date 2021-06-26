@@ -16,16 +16,19 @@ class Food {
   }
 
   spawn(snake?: Snake) {
-    let gridCoords = this.board.ALL_GRID_COORDS;
+    let coords = this.board.ALL_GRID_COORDS.reduce(
+      (prev, curr) => [...prev, ...curr],
+      []
+    );
     if (snake) {
-      gridCoords = gridCoords.filter(
+      coords = coords.filter(
         (item) => !snake.body.find((v) => v.x === item.x && v.y === item.y)
       );
     }
 
-    const randIndex = this.p.floor(this.p.random(gridCoords.length));
-    this.x = gridCoords[randIndex].x;
-    this.y = gridCoords[randIndex].y;
+    const randIndex = this.p.floor(this.p.random(coords.length));
+    this.x = coords[randIndex].x;
+    this.y = coords[randIndex].y;
   }
 
   draw() {
