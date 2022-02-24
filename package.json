@@ -11,7 +11,7 @@
     "@types/p5": "^1.4.0",
     "@types/react": "^17.0.39",
     "@types/react-dom": "^17.0.11",
-    "@types/styled-components": "^5.1.22",
+    "@types/styled-components": "^5.1.23",
     "p5": "^1.4.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
