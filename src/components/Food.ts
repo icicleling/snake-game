@@ -5,8 +5,8 @@ import Snake from "./Snake";
 
 class Food {
   p: p5;
-  boardCol: number = 0;
-  boardRow: number = 0;
+  boardCol = 0;
+  boardRow = 0;
   board: Board;
 
   constructor(p: p5, board: Board) {

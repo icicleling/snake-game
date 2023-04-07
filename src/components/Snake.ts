@@ -23,7 +23,7 @@ class Snake {
 
   draw() {
     this.p.fill(100);
-    for (let { boardCol, boardRow } of this.body) {
+    for (const { boardCol, boardRow } of this.body) {
       this.p.rect(
         this.board.ALL_GRID_COORDS[boardRow][boardCol].x,
         this.board.ALL_GRID_COORDS[boardRow][boardCol].y,
