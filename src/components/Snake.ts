@@ -1,12 +1,12 @@
 import p5 from "p5";
-import { DirectionEnum, GRID_SIZE } from "../utils/constants";
+import { DirectionEnum, GRID_SIZE } from "../constants";
 import Board from "./Board";
 import Food from "./Food";
 
 class Snake {
   p: p5;
   body: { boardRow: number; boardCol: number }[];
-  dir: DirectionEnum | undefined;
+  direction: DirectionEnum | undefined;
   lastX: number;
   lastY: number;
   board: Board;
@@ -16,7 +16,7 @@ class Snake {
     this.board = board;
     this.body = [];
     this.body.push({ boardRow: GRID_SIZE / 2, boardCol: GRID_SIZE / 2 });
-    this.dir = undefined;
+    this.direction = undefined;
     this.lastY = this.body[this.body.length - 1].boardRow;
     this.lastX = this.body[this.body.length - 1].boardCol;
   }
@@ -41,13 +41,13 @@ class Snake {
       this.body[i].boardCol = this.body[i - 1].boardCol;
     }
 
-    if (this.dir === DirectionEnum.Up) {
+    if (this.direction === DirectionEnum.Up) {
       this.body[0].boardRow = this.body[0].boardRow - 1;
-    } else if (this.dir === DirectionEnum.Down) {
+    } else if (this.direction === DirectionEnum.Down) {
       this.body[0].boardRow = this.body[0].boardRow + 1;
-    } else if (this.dir === DirectionEnum.Left) {
+    } else if (this.direction === DirectionEnum.Left) {
       this.body[0].boardCol = this.body[0].boardCol - 1;
-    } else if (this.dir === DirectionEnum.Right) {
+    } else if (this.direction === DirectionEnum.Right) {
       this.body[0].boardCol = this.body[0].boardCol + 1;
     }
 
@@ -62,7 +62,7 @@ class Snake {
   spawn() {
     this.body = [];
     this.body.push({ boardRow: GRID_SIZE / 2, boardCol: GRID_SIZE / 2 });
-    this.dir = undefined;
+    this.direction = undefined;
     this.lastY = this.body[this.body.length - 1].boardRow;
     this.lastX = this.body[this.body.length - 1].boardCol;
     this.p.frameRate(0);

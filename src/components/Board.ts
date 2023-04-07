@@ -1,6 +1,6 @@
 import p5 from "p5";
-import { GRID_SIZE } from "../utils/constants";
-import { Coords } from "../utils/interface";
+import { GRID_SIZE } from "../constants";
+import { Coords } from "../interface";
 
 class Board {
   p: p5;

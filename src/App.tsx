@@ -1,11 +1,12 @@
 import React, { useEffect, useRef } from "react";
 import "./App.css";
 import p5 from "p5";
-import { DirectionEnum, FRAME_RATE } from "./utils/constants";
+import { DirectionEnum, FRAME_RATE } from "./constants";
 import Snake from "./components/Snake";
 import Food from "./components/Food";
 import Board from "./components/Board";
 import styled from "styled-components";
+import TouchController from "./components/TouchController";
 
 function App() {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -25,7 +26,7 @@ function App() {
 
       const draw = () => {
         if (nextDirection.current.length) {
-          snake.dir = nextDirection.current[0];
+          snake.direction = nextDirection.current[0];
           nextDirection.current.shift();
         }
 
@@ -59,16 +60,25 @@ function App() {
           const prevDirection =
             nextDirection.current[nextDirection.current.length - 1];
 
-          if (p.keyCode === 38 && prevDirection !== DirectionEnum.Down) {
+          if (
+            p.keyCode === p.UP_ARROW &&
+            prevDirection !== DirectionEnum.Down
+          ) {
             nextDirection.current.push(DirectionEnum.Up);
-          } else if (p.keyCode === 40 && prevDirection !== DirectionEnum.Up) {
+          } else if (
+            p.keyCode === p.DOWN_ARROW &&
+            prevDirection !== DirectionEnum.Up
+          ) {
             nextDirection.current.push(DirectionEnum.Down);
           } else if (
-            p.keyCode === 37 &&
+            p.keyCode === p.LEFT_ARROW &&
             prevDirection !== DirectionEnum.Right
           ) {
             nextDirection.current.push(DirectionEnum.Left);
-          } else if (p.keyCode === 39 && prevDirection !== DirectionEnum.Left) {
+          } else if (
+            p.keyCode === p.RIGHT_ARROW &&
+            prevDirection !== DirectionEnum.Left
+          ) {
             nextDirection.current.push(DirectionEnum.Right);
           }
           return;
@@ -77,13 +87,25 @@ function App() {
         prevKeyTime.current = Date.now();
         nextDirection.current = [];
 
-        if (p.keyCode === 38 && snake.dir !== DirectionEnum.Down) {
+        if (
+          p.keyCode === p.UP_ARROW &&
+          snake.direction !== DirectionEnum.Down
+        ) {
           nextDirection.current.push(DirectionEnum.Up);
-        } else if (p.keyCode === 40 && snake.dir !== DirectionEnum.Up) {
+        } else if (
+          p.keyCode === p.DOWN_ARROW &&
+          snake.direction !== DirectionEnum.Up
+        ) {
           nextDirection.current.push(DirectionEnum.Down);
-        } else if (p.keyCode === 37 && snake.dir !== DirectionEnum.Right) {
+        } else if (
+          p.keyCode === p.LEFT_ARROW &&
+          snake.direction !== DirectionEnum.Right
+        ) {
           nextDirection.current.push(DirectionEnum.Left);
-        } else if (p.keyCode === 39 && snake.dir !== DirectionEnum.Left) {
+        } else if (
+          p.keyCode === p.RIGHT_ARROW &&
+          snake.direction !== DirectionEnum.Left
+        ) {
           nextDirection.current.push(DirectionEnum.Right);
         }
       };
@@ -96,10 +118,19 @@ function App() {
     initialP5();
   }, []);
 
-  return <Root ref={contentRef} />;
+  return (
+    <Root>
+      <BoardNode ref={contentRef} />
+      <TouchController />
+    </Root>
+  );
 }
 
 const Root = styled.div`
+  margin-top: 8px;
+`;
+
+const BoardNode = styled.div`
   margin: 0 auto;
   width: max-content;
 `;

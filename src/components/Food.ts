@@ -1,5 +1,5 @@
 import p5 from "p5";
-import { GRID_SIZE } from "../utils/constants";
+import { GRID_SIZE } from "../constants";
 import Board from "./Board";
 import Snake from "./Snake";
 
