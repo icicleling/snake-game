@@ -1,10 +1,13 @@
-import React from "react";
+import React, { createRef, useEffect } from "react";
 import { checkTouchDevice } from "../utils";
 import styled from "styled-components";
 import p5 from "p5";
 
 const TouchController = () => {
   if (!checkTouchDevice) return null;
+
+  const rootRef = createRef<HTMLDivElement>();
+  const dragPointRef = createRef<HTMLDivElement>();
   const { UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW } = p5.prototype;
 
   const dispatchEvent = (keyCode: number) => {
@@ -13,12 +16,35 @@ const TouchController = () => {
     if ("vibrate" in navigator) navigator.vibrate(20);
   };
 
+  useEffect(() => {
+    const rootEl = rootRef.current;
+    const dragPointEl = dragPointRef.current;
+    if (!rootEl || !dragPointEl) return;
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (rootEl.style.bottom !== "unset") rootEl.style.bottom = "unset";
+      if (rootEl.style.transform !== "translateX(-50%) translateY(-50%)")
+        rootEl.style.transform = "translateX(-50%) translateY(-50%)";
+
+      rootEl.style.left = `${e.touches[0].clientX}px`;
+      rootEl.style.top = `${e.touches[0].clientY}px`;
+    };
+
+    dragPointEl.addEventListener("touchstart", () =>
+      rootEl.addEventListener("touchmove", handleTouchMove)
+    );
+
+    dragPointEl.addEventListener("touchend", () =>
+      rootEl.removeEventListener("touchmove", handleTouchMove)
+    );
+  });
+
   return (
-    <Root>
+    <Root ref={rootRef}>
       <Button onTouchStart={() => dispatchEvent(UP_ARROW)}>↑</Button>
       <div className="middle">
         <Button onTouchStart={() => dispatchEvent(LEFT_ARROW)}>←</Button>
-        <DragPoint />
+        <DragPoint ref={dragPointRef} />
         <Button onTouchStart={() => dispatchEvent(RIGHT_ARROW)}>→</Button>
       </div>
       <Button onTouchStart={() => dispatchEvent(DOWN_ARROW)}>↓</Button>

@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from "react";
-import "./App.css";
 import p5 from "p5";
 import { DirectionEnum, FRAME_RATE } from "./constants";
 import Snake from "./components/Snake";
