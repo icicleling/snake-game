@@ -32,9 +32,14 @@ function App() {
         board.draw();
 
         snake.update();
-        snake.draw();
-        if (snake.hasEatenFood(food)) {
-          food.spawn(snake);
+        const hasEatenFood = snake.hasEatenFood(food);
+        snake.draw(hasEatenFood);
+
+        if (food.isNoPlaceToPut) food.spawn(snake);
+
+        if (hasEatenFood) {
+          const isNoPlaceToPut = food.spawn(snake);
+          if (!isNoPlaceToPut) p.frameRate(0);
           snake.grow();
         }
         food.draw();
@@ -46,7 +51,7 @@ function App() {
         p.frameRate(0);
 
         snake = new Snake(p, board);
-        food = new Food(p, board);
+        food = new Food(p, board, snake);
         draw();
       };
 

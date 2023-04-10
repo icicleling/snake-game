@@ -21,9 +21,31 @@ class Snake {
     this.lastX = this.body[this.body.length - 1].boardCol;
   }
 
-  draw() {
+  draw(isEaten?: boolean) {
+    const head = this.body[0];
+    if (!head) return;
+
     this.p.fill(100);
-    for (const { boardCol, boardRow } of this.body) {
+    const { x: headCoordX, y: headCoordY } =
+      this.board.ALL_GRID_COORDS[head.boardRow][head.boardCol];
+    this.p.rect(
+      headCoordX,
+      headCoordY,
+      this.p.width / GRID_SIZE,
+      this.p.height / GRID_SIZE
+    );
+
+    const fontSize = this.p.width / GRID_SIZE / 2;
+    this.p.textSize(fontSize);
+    this.p.fill(255);
+    this.p.text(
+      isEaten ? "^o^" : "^_^",
+      headCoordX + fontSize / 3.5,
+      headCoordY + fontSize * 1.2
+    );
+
+    this.p.fill(100);
+    for (const { boardCol, boardRow } of this.body.slice(1)) {
       this.p.rect(
         this.board.ALL_GRID_COORDS[boardRow][boardCol].x,
         this.board.ALL_GRID_COORDS[boardRow][boardCol].y,
